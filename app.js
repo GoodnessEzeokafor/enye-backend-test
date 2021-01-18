@@ -2,7 +2,7 @@ const express = require("express")
 const path = require("path")
 const bodyParser = require("body-parser")
 
-const helmet = require("helmet")
+
 const mainRoutes = require("./routes/index.js")
 
 // view engine setup
@@ -28,10 +28,20 @@ const app = express()
 app.use(express.json());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(helmet())
+// app.use(helmet())
 
+  /** VIEWS CONFIGURATION */
+  /** SERVING PUBLIC FILES */
+  app.use(express.static(path.join(__dirname, "public")));
+  /** SERVING PUBLIC FILES */
+  app.set("views", path.join(__dirname, "views"));
+  app.set("view engine", "ejs");
+  /** VIEWS CONFIGURATION */
 
-app.use("/api", mainRoutes)
+  app.get("", (req, res) => {
+    res.render("index")
+  })
+  app.use("/api", mainRoutes)
 
 
 const {HTTP_HOST, PORT} = process.env
